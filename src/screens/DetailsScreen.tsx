@@ -8,7 +8,7 @@ function DetailsScreen({ route }) {
     const [isFavorite, setIsFavorite] = useState(route.params.isFavorite);
 
     const handleFavoritePress = () => {
-        if (!route.params.isFavorite) {
+        if (!isFavorite) {
             setIsFavorite(true);
             route.params.setFavorite(route.params.title);
         } else {
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     cover: {
         width: 300,
         height: 300,
+        opacity: 0.8,
     },
     heart: {
         position: 'absolute',
