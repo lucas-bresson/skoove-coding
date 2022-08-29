@@ -1,36 +1,42 @@
-# TypeScript Example
+# Skoove Coding Challenge
 
-<p>
-  <!-- iOS -->
-  <img alt="Supports Expo iOS" longdesc="Supports Expo iOS" src="https://img.shields.io/badge/iOS-4630EB.svg?style=flat-square&logo=APPLE&labelColor=999999&logoColor=fff" />
-  <!-- Android -->
-  <img alt="Supports Expo Android" longdesc="Supports Expo Android" src="https://img.shields.io/badge/Android-4630EB.svg?style=flat-square&logo=ANDROID&labelColor=A4C639&logoColor=fff" />
-  <!-- Web -->
-  <img alt="Supports Expo Web" longdesc="Supports Expo Web" src="https://img.shields.io/badge/web-4630EB.svg?style=flat-square&logo=GOOGLE-CHROME&labelColor=4285F4&logoColor=fff" />
-</p>
+## The following rules apply:
 
-```sh
-npx create-react-native-app -t with-typescript
-```
+Please read the [root readme file](https://github.com/Learnfield-GmbH/CodingChallenge/blob/master/README.md).
 
-TypeScript is a superset of JavaScript which gives you static types and powerful tooling in Visual Studio Code including autocompletion and useful inline warnings for type errors.
+## The exercise
 
-## 🚀 How to use
+The application is able to load data from a server and playback the associated audio content.
 
-#### Creating a new project
+### The application
 
-- Install the CLI: `npm i -g expo-cli`
-- Create a project: `npx create-react-native-app -t with-typescript`
-- `cd` into the project
+1. Fetch the content of the manifest file<sup>1</sup> and show it in a scrollable list. (support reloading the manifest file).
+    - Each tile shows a non interactive rating element displayed as stars
+    - Each tile shows an interactive element to set the song as a favorite. There can only be one favorite set. As soon as a song is set as favorite, all others are set to non-favorite
+2. Upon clicking on one of the list entries, the application shall navigate to a new screen
+3. This new screen displays the content of the selected element. Additionally it shows:
+    - A play button on top of the cover image which starts / stops the playback of the associated audio file
+    - Audio playback control (load, play, pause and seek)
+    - A position slider which updates its position depending on the position of the currently playing audio. It should also be able to control the current audio position with this slider<sup>2</sup>
+    - The current play time and the audio duration<sup>2</sup>
+    - The interactive rating element displayed as stars. Rating can be set here
+    - The interactive favorite element to set the song as a favorite. (As above, there can only be one favorite set. As soon as a song is set as favorite, all others are set to non-favorite)
 
-### Adding TypeScript to existing projects
+### Tips
 
-- Create a blank TypeScript config: `touch tsconfig.json`
-- Run `yarn start` or `npm run start` to automatically configure TypeScript
-- Rename files to TypeScript, `.tsx` for React components and `.ts` for plain typescript files
+-   It is okay to start the development of the mobile application with appropriate components being hidden behind an abstraction layer and firstly being implemented simple, local mocks. (E.g. The network connectivity. Once all functionality is verified with this non-networking implementation, the real network implementation can be added.)
+-   In case you introduce abstractions and temporar mocks, please preserve both implementations.
+-   Reuse components wherever applicable.
+-   You can find some assets in the `assets` folder.
 
-> 💡 You can disable the TypeScript setup in Expo CLI with the environment variable `EXPO_NO_TYPESCRIPT_SETUP=1 expo start`
+### Footnotes
 
-## 📝 Notes
+<sup>1</sup>You can find the [manifest file here](data/manifest.json). [Direct link](https://raw.githubusercontent.com/Learnfield-GmbH/CodingChallenge/master/react%20native/simple%20audio%20player/data/manifest.json)
 
-- [Expo TypeScript guide](https://docs.expo.dev/versions/latest/guides/typescript/)
+<sup>2</sup>Update the value at an appropriate frequency
+
+### User Interface Mockup
+
+![Simple audio player mockup][simple audio player mockup]
+
+[simple audio player mockup]: mockup.png
