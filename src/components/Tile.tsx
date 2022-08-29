@@ -4,20 +4,21 @@ import Rating from './Rating';
 import FavoriteHeart from './FavoriteHeart';
 
 interface Props {
-    onPress: () => void;
     title: string;
     cover: any;
     isFavorite: boolean;
+    onPress: () => void;
+    onFavoritePress: () => void;
 }
 
-function Tile({ onPress, title, cover, isFavorite }: Props) {
+function Tile({ title, cover, isFavorite, onPress, onFavoritePress }: Props) {
     return (
         <TouchableOpacity onPress={onPress} style={styles.container}>
             <Rating value={3} size={24} style={styles.rating} />
             <Image source={{ uri: cover }} style={styles.cover} />
             <View style={styles.details}>
                 <Text style={styles.text}>{title}</Text>
-                <FavoriteHeart filled={isFavorite} size={32} style={styles.heart} />
+                <FavoriteHeart filled={isFavorite} size={32} onPress={onFavoritePress} style={styles.heart} />
             </View>
         </TouchableOpacity>
     );

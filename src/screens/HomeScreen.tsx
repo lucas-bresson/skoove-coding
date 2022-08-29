@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList, StyleSheet, Platform, StatusBar, View } from 'react-native';
 
 import manifest from '../data/manifest.json';
@@ -9,15 +9,32 @@ interface Props {
 }
 
 function HomeScreen({ navigation }: Props) {
+    const [favorite, setFavorite] = useState('');
+
     const renderItem = ({ item }) => {
+        const handlePress = () =>
+            navigation.navigate('Details', {
+                title: item.title,
+                cover: item.cover,
+                isFavorite: item.title === favorite,
+                setFavorite,
+            });
+
+        const handleFavoritePress = () => {
+            if (item.title !== favorite) {
+                setFavorite(item.title);
+            } else {
+                setFavorite('');
+            }
+        };
+
         return (
             <Tile
-                onPress={() =>
-                    navigation.navigate('Details', { title: item.title, cover: item.cover, isFavorite: false })
-                }
                 title={item.title}
                 cover={item.cover}
-                isFavorite={false}
+                isFavorite={item.title === favorite}
+                onPress={handlePress}
+                onFavoritePress={handleFavoritePress}
             />
         );
     };
