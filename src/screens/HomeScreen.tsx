@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, FlatList, StyleSheet, Platform, StatusBar, View } from 'react-native';
+import { FlatList, StyleSheet, Platform, StatusBar, View } from 'react-native';
 
 import manifest from '../data/manifest.json';
 import Tile from '../components/Tile';
@@ -24,7 +24,6 @@ function HomeScreen({ navigation }: Props) {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Skoovin'</Text>
             <FlatList data={manifest.data} renderItem={renderItem} />
         </View>
     );

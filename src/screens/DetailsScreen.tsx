@@ -7,10 +7,6 @@ import Rating from '../components/Rating';
 function DetailsScreen({ navigation, route }) {
     return (
         <SafeAreaView style={styles.container}>
-            <TouchableOpacity onPress={navigation.goBack} style={styles.goBack}>
-                <Text style={styles.goBackText}>Back</Text>
-            </TouchableOpacity>
-            <Text style={styles.title}>{route.params.title}</Text>
             <View>
                 <Image source={{ uri: route.params.cover }} style={styles.cover} />
                 <FavoriteHeart filled={false} size={64} style={styles.heart} />
@@ -29,20 +25,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
         alignItems: 'center',
-    },
-    goBack: {
-        position: 'absolute',
-        top: 32,
-        left: 8,
-    },
-    goBackText: {
-        fontSize: 18,
-    },
-    title: {
-        fontSize: 32,
-        color: '#000',
-        marginTop: 24,
-        marginBottom: 24,
     },
     cover: {
         width: 300,
