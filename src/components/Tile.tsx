@@ -9,12 +9,14 @@ interface Props {
     isFavorite: boolean;
     onPress: () => void;
     onFavoritePress: () => void;
+    rating?: number;
 }
 
-function Tile({ title, cover, isFavorite, onPress, onFavoritePress }: Props) {
+function Tile({ title, cover, isFavorite, onPress, onFavoritePress, rating }: Props) {
+    console.log('rating :>> ', rating);
     return (
         <TouchableOpacity onPress={onPress} style={styles.container}>
-            <Rating value={3} size={24} style={styles.rating} />
+            <Rating value={rating} size={24} style={styles.rating} />
             <Image source={{ uri: cover }} style={styles.cover} />
             <View style={styles.details}>
                 <Text style={styles.text}>{title}</Text>

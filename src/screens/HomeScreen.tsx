@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Platform, StatusBar, View } from 'react-native';
 
 import manifest from '../data/manifest.json';
@@ -10,6 +10,18 @@ interface Props {
 
 function HomeScreen({ navigation }: Props) {
     const [favorite, setFavorite] = useState('');
+    const [ratings, setRatings] = useState({});
+
+    useEffect(() => {
+        console.log('ratings', ratings);
+    }, [ratings]);
+
+    const setRating = ({ title, rating }: { title: string; rating: number }) => {
+        setRatings((prevState) => ({
+            ...prevState,
+            [title]: rating,
+        }));
+    };
 
     const renderItem = ({ item }) => {
         const handlePress = () =>
@@ -18,6 +30,8 @@ function HomeScreen({ navigation }: Props) {
                 cover: item.cover,
                 isFavorite: item.title === favorite,
                 setFavorite,
+                rating: ratings[item.title],
+                setRating,
             });
 
         const handleFavoritePress = () => {
@@ -35,6 +49,7 @@ function HomeScreen({ navigation }: Props) {
                 isFavorite={item.title === favorite}
                 onPress={handlePress}
                 onFavoritePress={handleFavoritePress}
+                rating={ratings[item.title]}
             />
         );
     };

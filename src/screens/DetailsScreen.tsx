@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, Platform, StatusBar, SafeAreaView, TouchableOpacity, View, Image } from 'react-native';
+import { StyleSheet, Platform, StatusBar, SafeAreaView, View, Image } from 'react-native';
 import Slider from '@react-native-community/slider';
 import FavoriteHeart from '../components/FavoriteHeart';
 import Rating from '../components/Rating';
 
 function DetailsScreen({ route }) {
     const [isFavorite, setIsFavorite] = useState(route.params.isFavorite);
+    const [localRating, setLocalRating] = useState(route.params.rating);
 
     const handleFavoritePress = () => {
         if (!isFavorite) {
@@ -17,6 +18,11 @@ function DetailsScreen({ route }) {
         }
     };
 
+    const handleRatingPressed = (rating: number) => {
+        setLocalRating(rating);
+        route.params.setRating({ title: route.params.title, rating });
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <View>
@@ -24,7 +30,7 @@ function DetailsScreen({ route }) {
                 <FavoriteHeart filled={isFavorite} size={64} onPress={handleFavoritePress} style={styles.heart} />
             </View>
             <Slider minimumValue={0} maximumValue={100} step={1} style={styles.slider} />
-            <Rating value={3} size={40} style={styles.rating} />
+            <Rating value={localRating} size={40} handleRatingPressed={handleRatingPressed} style={styles.rating} />
         </SafeAreaView>
     );
 }
