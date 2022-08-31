@@ -86,6 +86,7 @@ function DetailsScreen({ route }) {
                 { positionMillis: currentPosition },
                 onPlaybackStatusUpdate
             );
+            setSound(sound);
             sound.playAsync();
         } catch (error) {
             console.log('error', error);
