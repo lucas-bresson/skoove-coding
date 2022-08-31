@@ -22,8 +22,7 @@ function HomeScreen({ navigation }: Props) {
     const renderItem = ({ item }) => {
         const handlePress = () =>
             navigation.navigate('Details', {
-                title: item.title,
-                cover: item.cover,
+                song: item,
                 isFavorite: item.title === favorite,
                 setFavorite,
                 rating: ratings[item.title],
