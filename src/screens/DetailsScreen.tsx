@@ -1,8 +1,22 @@
 import React, { useState } from 'react';
-import { StyleSheet, Platform, StatusBar, SafeAreaView, View, Image } from 'react-native';
+import { StyleSheet, Platform, StatusBar, SafeAreaView, View, Image, TouchableOpacity } from 'react-native';
 import Slider from '@react-native-community/slider';
 import FavoriteHeart from '../components/FavoriteHeart';
-import Rating from '../components/Rating';
+
+const Star = ({ value, treshold, onPress }: { treshold: number; value: number; onPress: (rating: number) => void }) => {
+    return (
+        <TouchableOpacity onPress={() => onPress(treshold)}>
+            <Image
+                source={
+                    value < treshold
+                        ? require('../assets/star-line-black.png')
+                        : require('../assets/star-filled-black.png')
+                }
+                style={styles.star}
+            />
+        </TouchableOpacity>
+    );
+};
 
 function DetailsScreen({ route }) {
     const [isFavorite, setIsFavorite] = useState(route.params.isFavorite);
@@ -30,7 +44,13 @@ function DetailsScreen({ route }) {
                 <FavoriteHeart filled={isFavorite} size={64} onPress={handleFavoritePress} style={styles.heart} />
             </View>
             <Slider minimumValue={0} maximumValue={100} step={1} style={styles.slider} />
-            <Rating value={localRating} size={40} handleRatingPressed={handleRatingPressed} style={styles.rating} />
+            <View style={styles.rating}>
+                <Star treshold={1} value={localRating || -1} onPress={() => handleRatingPressed(1)} />
+                <Star treshold={2} value={localRating || -1} onPress={() => handleRatingPressed(2)} />
+                <Star treshold={3} value={localRating || -1} onPress={() => handleRatingPressed(3)} />
+                <Star treshold={4} value={localRating || -1} onPress={() => handleRatingPressed(4)} />
+                <Star treshold={5} value={localRating || -1} onPress={() => handleRatingPressed(5)} />
+            </View>
         </SafeAreaView>
     );
 }
@@ -60,6 +80,11 @@ const styles = StyleSheet.create({
         width: 300,
     },
     rating: {
+        flexDirection: 'row',
         marginTop: 24,
+    },
+    star: {
+        width: 32,
+        height: 32,
     },
 });

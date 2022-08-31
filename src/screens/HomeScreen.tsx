@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FlatList, StyleSheet, Platform, StatusBar, View } from 'react-native';
 
 import manifest from '../data/manifest.json';
@@ -11,10 +11,6 @@ interface Props {
 function HomeScreen({ navigation }: Props) {
     const [favorite, setFavorite] = useState('');
     const [ratings, setRatings] = useState({});
-
-    useEffect(() => {
-        console.log('ratings', ratings);
-    }, [ratings]);
 
     const setRating = ({ title, rating }: { title: string; rating: number }) => {
         setRatings((prevState) => ({

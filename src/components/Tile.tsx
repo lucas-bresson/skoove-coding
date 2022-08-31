@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import Rating from './Rating';
 import FavoriteHeart from './FavoriteHeart';
 
 interface Props {
@@ -12,11 +11,25 @@ interface Props {
     rating?: number;
 }
 
+const Star = ({ value, treshold }: { treshold: number; value: number }) => (
+    <Image
+        source={
+            value < treshold ? require('../assets/star-line-black.png') : require('../assets/star-filled-black.png')
+        }
+        style={styles.star}
+    />
+);
+
 function Tile({ title, cover, isFavorite, onPress, onFavoritePress, rating }: Props) {
-    console.log('rating :>> ', rating);
     return (
         <TouchableOpacity onPress={onPress} style={styles.container}>
-            <Rating value={rating} size={24} style={styles.rating} />
+            <View style={styles.ratings}>
+                <Star treshold={1} value={rating || -1} />
+                <Star treshold={2} value={rating || -1} />
+                <Star treshold={3} value={rating || -1} />
+                <Star treshold={4} value={rating || -1} />
+                <Star treshold={5} value={rating || -1} />
+            </View>
             <Image source={{ uri: cover }} style={styles.cover} />
             <View style={styles.details}>
                 <Text style={styles.text}>{title}</Text>
@@ -35,11 +48,16 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         margin: 24,
     },
-    rating: {
+    ratings: {
         position: 'absolute',
         top: 8,
         left: 8,
+        flexDirection: 'row',
         zIndex: 1,
+    },
+    star: {
+        height: 18,
+        width: 18,
     },
     cover: {
         flex: 1,
