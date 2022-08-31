@@ -1,11 +1,32 @@
-import React, { useState } from 'react';
-import { StyleSheet, Platform, StatusBar, SafeAreaView, View, Image, TouchableOpacity, LogBox } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+    Text,
+    StyleSheet,
+    Platform,
+    StatusBar,
+    SafeAreaView,
+    View,
+    Image,
+    TouchableOpacity,
+    LogBox,
+} from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Audio } from 'expo-av';
 
 LogBox.ignoreLogs(['Non-serializable values were found in the navigation state']);
 
 import FavoriteHeart from '../components/FavoriteHeart';
+
+const getTimer = (currentPosition: number) => {
+    const seconds = Math.round(currentPosition / 1000);
+    const minutes = Math.round(seconds / 60);
+
+    if (seconds < 10) {
+        return `${minutes || 0}:0${seconds || 0}`;
+    }
+
+    return `${minutes || 0}:${seconds || 0}`;
+};
 
 const Star = ({ value, treshold, onPress }: { treshold: number; value: number; onPress: (rating: number) => void }) => {
     return (
@@ -22,11 +43,11 @@ const Star = ({ value, treshold, onPress }: { treshold: number; value: number; o
     );
 };
 
-const PlayButton = ({ playing, onPress }: { playing: boolean; onPress: () => void }) => {
+const PlayButton = ({ isPlaying, onPress }: { isPlaying: boolean; onPress: () => void }) => {
     return (
         <TouchableOpacity style={styles.playButton} onPress={onPress}>
             <Image
-                source={playing ? require('../assets/pause.png') : require('../assets/play.png')}
+                source={isPlaying ? require('../assets/pause.png') : require('../assets/play.png')}
                 style={{ height: 90, width: 90 }}
             />
         </TouchableOpacity>
@@ -36,20 +57,42 @@ const PlayButton = ({ playing, onPress }: { playing: boolean; onPress: () => voi
 function DetailsScreen({ route }) {
     const [isFavorite, setIsFavorite] = useState(route.params.isFavorite);
     const [localRating, setLocalRating] = useState(route.params.rating);
-    const [playing, setPlaying] = useState(false);
-    const [sound, setSound] = useState(route.params.song.audio);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [currentPosition, setCurrentPosition] = useState(0);
+    const [sound, setSound] = useState(undefined);
 
     const { title, cover, audio, totalDurationMs } = route.params.song;
 
+    const totalDurationSeconds = Math.round(totalDurationMs / 1000);
+    const totalDurationMinutes = Math.round(totalDurationSeconds / 60);
+
+    const onPlaybackStatusUpdate = (status) => {
+        if (status.isPlaying) {
+            setIsPlaying(true);
+            setCurrentPosition(status.positionMillis);
+        } else {
+            setIsPlaying(false);
+        }
+        if (status.didJustFinish) {
+            setIsPlaying(false);
+            setCurrentPosition(0);
+        }
+    };
+
     async function playSound() {
-        setPlaying(true);
-        const { sound } = await Audio.Sound.createAsync({ uri: audio });
-        setSound(sound);
-        await sound.playAsync();
+        try {
+            const { sound } = await Audio.Sound.createAsync(
+                { uri: audio },
+                { positionMillis: currentPosition },
+                onPlaybackStatusUpdate
+            );
+            sound.playAsync();
+        } catch (error) {
+            console.log('error', error);
+        }
     }
 
     async function pauseSound() {
-        setPlaying(false);
         await sound.pauseAsync();
     }
 
@@ -73,9 +116,10 @@ function DetailsScreen({ route }) {
             <View>
                 <Image source={{ uri: cover }} style={styles.cover} />
                 <FavoriteHeart filled={isFavorite} size={64} onPress={handleFavoritePress} style={styles.heart} />
-                <PlayButton playing={playing} onPress={playing ? pauseSound : playSound} />
+                <PlayButton isPlaying={isPlaying} onPress={isPlaying ? pauseSound : playSound} />
             </View>
-            <Slider minimumValue={0} maximumValue={100} step={1} style={styles.slider} />
+            <Slider value={currentPosition} minimumValue={0} maximumValue={totalDurationMs} style={styles.slider} />
+            <Text>{`${getTimer(currentPosition)} / ${totalDurationMinutes}:${totalDurationSeconds}`}</Text>
             <View style={styles.rating}>
                 <Star treshold={1} value={localRating || -1} onPress={() => handleRatingPressed(1)} />
                 <Star treshold={2} value={localRating || -1} onPress={() => handleRatingPressed(2)} />
